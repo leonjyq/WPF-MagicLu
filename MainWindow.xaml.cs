@@ -187,17 +187,21 @@ namespace Desktop
             if (DistributorOK && D2COK)
             {
                 string tempFile = System.IO.Path.GetTempPath() + Guid.NewGuid().ToString() + ".csv";
-                MessageBoxResult dr2 = MessageBox.Show(tempFile + "", "Temple File", MessageBoxButton.OKCancel, MessageBoxImage.Question);
                 Label executeFileName = fileName;
                 //MessageBoxResult dr2 = MessageBox.Show(executeFileName.Content + "", "JSON", MessageBoxButton.OKCancel, MessageBoxImage.Question);
 
-                ProcessStartInfo startInfo = new ProcessStartInfo("execel-processor.exe");
-                startInfo.WorkingDirectory = @"C:\Users\leonj\Documents\GitHub\excel-processor";
-                startInfo.Arguments = "-in \"" + executeFileName.Content + "\"  -out \"" + tempFile + "\"  -distributor '" + DistributorJSON + "' -d2c '" + D2CJSON + "'";
-                MessageBoxResult dr3 = MessageBox.Show(startInfo.Arguments + "", "Arguments", MessageBoxButton.OKCancel, MessageBoxImage.Question);
-                Process p = Process.Start(startInfo);
-
-                p.WaitForExit();
+                //ProcessStartInfo startInfo = new ProcessStartInfo("D:\\processor.exe");
+                //startInfo.Arguments = "/k -in \"" + executeFileName.Content + "\"  -out \"" + tempFile + "\"  -distributor '" + DistributorJSON + "' -d2c '" + D2CJSON + "'";
+                Process process = new Process();
+                process.StartInfo.WorkingDirectory = System.Environment.CurrentDirectory;
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.FileName = "processor.exe";
+                process.StartInfo.Arguments = "-in \"" + executeFileName.Content + "\"  -out \"" + tempFile + "\"  -distributor " + DistributorJSON + " -d2c " + D2CJSON;
+                //process.StartInfo.RedirectStandardInput = true;
+                //process.StartInfo.RedirectStandardOutput = true;
+                //process.StartInfo.RedirectStandardError = true;
+                process.Start();
+                process.WaitForExit();
 
                 Stream myStream;
                 Microsoft.Win32.SaveFileDialog saveFileDialog =
